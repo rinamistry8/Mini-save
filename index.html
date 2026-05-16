@@ -1,159 +1,313 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dark Aesthetic Sticker Gallery</title>
-
-<link href="https://googleapis.com" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dark Pinterest Gallery Pro</title>
 
 <style>
 body{
     margin:0;
-    font-family:'Poppins',sans-serif;
-    background:#111;
+    font-family: Arial, sans-serif;
+    background:#0b0b0b;
     color:white;
 }
+
 header{
+    padding:16px;
     text-align:center;
-    padding:20px;
-    background:#1a1a1a;
-    position:sticky;
-    top:0;
-    z-index:100;
+    font-size:22px;
+    font-weight:bold;
 }
-h1{
-    color:#ff66b2;
-}
+
 input{
-    width:85%;
-    max-width:400px;
+    width:90%;
+    max-width:520px;
     padding:12px;
-    border:2px solid transparent;
-    border-radius:25px;
-    background:#2b2b2b;
-    color:white;
-    font-size:16px;
+    border:none;
+    border-radius:10px;
     outline:none;
-    transition: 0.3s;
+    margin:10px auto;
+    display:block;
+    background:#1a1a1a;
+    color:white;
 }
-input:focus{
-    border-color: #ff66b2;
-    box-shadow: 0 0 10px rgba(255, 102, 178, 0.4);
-}
-.gallery{
+
+#gallery{
     column-count:4;
-    column-gap:15px;
+    column-gap:12px;
     padding:15px;
 }
+
+@media(max-width:1000px){#gallery{column-count:3;}}
+@media(max-width:700px){#gallery{column-count:2;}}
+@media(max-width:450px){#gallery{column-count:1;}}
+
 .card{
     break-inside:avoid;
-    margin-bottom:15px;
-    background:#1c1c1c;
-    border-radius:16px;
+    margin-bottom:12px;
+    background:#151515;
+    border-radius:12px;
     overflow:hidden;
-    transition: transform .3s ease, box-shadow .3s ease;
-    cursor:pointer;
+    transition:0.2s;
 }
-.card:hover{
-    transform:scale(1.03);
-    box-shadow: 0 0 15px rgba(255, 102, 178, 0.4);
+.card:hover{transform:scale(1.02);}
+
+.img-container{
+    position:relative;
+    background:#151515;
+    width:100%;
 }
+
 .card img{
     width:100%;
     display:block;
-    padding: 15px; /* আইকনগুলো যেন সুন্দরভাবে ফিট হয় */
-    box-sizing: border-box;
+    opacity:0;
+    transition:opacity 0.4s ease;
 }
+
+.skeleton{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(90deg,#222,#333,#222);
+    background-size:200% 100%;
+    animation:shimmer 1.2s infinite;
+}
+
+@keyframes shimmer{
+    0%{background-position:-200% 0;}
+    100%{background-position:200% 0;}
+}
+
 .caption{
-    text-align:center;
-    padding:10px;
-    color:#ffcce6;
+    padding:8px 10px;
+    font-size:13px;
+    color:#bbb;
 }
-.hidden{
-    display:none !important;
+
+.actions{
+    display:flex;
+    justify-content:space-between;
+    padding:8px;
 }
-.toast{
+
+button{
+    border:none;
+    padding:6px 10px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:12px;
+    background:#2a2a2a;
+    color:white;
+}
+button:hover{background:#3a3a3a;}
+
+/* Masonry Layout Error Message Fixed */
+.no-results {
+    column-span: all; 
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 16px;
+}
+
+#toast{
     position:fixed;
-    bottom:-60px;
+    bottom:20px;
     left:50%;
     transform:translateX(-50%);
-    background:#ff66b2;
-    color:black;
-    padding:12px 20px;
-    border-radius:20px;
-    transition:.4s;
-    font-weight: 600;
-    z-index: 1000;
+    background:#222;
+    padding:10px 14px;
+    border-radius:8px;
+    opacity:0;
+    transition:0.3s;
+    z-index:1000;
 }
-.toast.show{
-    bottom:30px;
-}
-#no-match{
-    display:none;
-    text-align:center;
-    color:#ff66b2;
-    font-size:20px;
-    margin-top: 40px;
-}
-@media(max-width:900px){ .gallery{column-count:2;} }
-@media(max-width:500px){ .gallery{column-count:1;} }
+#toast.show{opacity:1;}
 </style>
 </head>
+
 <body>
 
-<header>
-    <h1>🌙 Dark Sticker Gallery</h1>
-    <input type="text" id="search" placeholder="Search stickers...">
-</header>
+<header>🌑 Dark Pinterest Sticker Gallery Pro</header>
+<input id="search" placeholder="Search stickers..."/>
 
-<div id="toast" class="toast">Sticker link copied 🖤</div>
-
-<!-- আপনার নতুন Flaticon স্টিকার গ্যালারি -->
-<div class="gallery">
-    <div class="card"><img src="https://cdn-icons-png.flaticon.com/512/616/616494.png"><div class="caption">Moon vibe 🌙</div></div>
-    <div class="card"><img src="https://cdn-icons-png.flaticon.com/512/742/742751.png"><div class="caption">Dark anime 🖤</div></div>
-    <div class="card"><img src="https://cdn-icons-png.flaticon.com/512/869/869869.png"><div class="caption">Night aesthetic ✨</div></div>
-    <div class="card"><img src="https://cdn-icons-png.flaticon.com/512/833/833472.png"><div class="caption">Kawaii black 🎀</div></div>
-    <div class="card"><img src="https://cdn-icons-png.flaticon.com/512/616/616430.png"><div class="caption">Cute sticker 💜</div></div>
-    <div class="card"><img src="https://cdn-icons-png.flaticon.com/512/2922/2922510.png"><div class="caption">Soft goth 🌌</div></div>
-</div>  
-
-<div id="no-match">No stickers found 🖤</div>
+<div id="gallery"></div>
+<div id="toast">Copied!</div>
 
 <script>
+const gallery = document.getElementById("gallery");
 const search = document.getElementById("search");
-const cards = document.querySelectorAll(".card");
 const toast = document.getElementById("toast");
-const noMatch = document.getElementById("no-match");
+
+const keywords = [
+  "anime goth","cyberpunk","dark anime",
+  "cute ghost","goth girl","neon character",
+  "witch anime","chibi dark"
+];
+
+let data = [];
+let filtered = [];
+let index = 0;
+const batch = 15;
+
+/* DATA GENERATION */
+for(let i=1;i<=200;i++){
+    const k = keywords[i % keywords.length];
+    const height = 400 + (i % 3) * 100;
+    const width = 300; 
+
+    data.push({
+        img:`https://picsum.photos{width}/${height}?random=${i}`,
+        name:`${k} #${i}`,
+        width: width,
+        height: height
+    });
+}
+
+filtered = [...data];
+
+/* TOAST CONTROLLER */
 let toastTimeout;
+function showToast(text="Copied!"){
+    clearTimeout(toastTimeout);
+    toast.textContent = text;
+    toast.classList.add("show");
+    toastTimeout = setTimeout(()=>toast.classList.remove("show"),1200);
+}
 
-search.addEventListener("input", function(){
-    let found = false;
-    const searchValue = search.value.toLowerCase().trim();
-
-    cards.forEach(card=>{
-        const text = card.innerText.toLowerCase();
-        if(text.includes(searchValue)){
-            card.classList.remove("hidden");
-            found = true;
-        } else {
-            card.classList.add("hidden");
+/* IMAGE LAZY LOAD OBSERVER */
+const imgObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+        if(!entry.isIntersecting) return;
+        const img = entry.target;
+        if(img.dataset.src && img.src !== img.dataset.src) {
+            img.src = img.dataset.src;
+            imgObserver.unobserve(img);
         }
     });
-    noMatch.style.display = found ? "none" : "block";
+}, { rootMargin: "200px" }); // স্ক্রিনে আসার ২০০px আগেই লোড শুরু হবে (Better UX)
+
+/* CARD CREATION */
+function createCard(item){
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+        <div class="img-container" style="aspect-ratio: ${item.width} / ${item.height};">
+            <div class="skeleton"></div>
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+                 data-src="${item.img}" alt="${item.name}">
+        </div>
+        <div class="caption">${item.name}</div>
+        <div class="actions">
+            <button class="copy">Copy</button>
+            <button class="download">Download</button>
+        </div>
+    `;
+
+    const img = card.querySelector("img");
+    const skeleton = card.querySelector(".skeleton");
+
+    imgObserver.observe(img);
+
+    img.onload = () => {
+        if (img.src.startsWith('data:')) return;
+        skeleton.style.display = "none";
+        img.style.opacity = 1;
+    };
+
+    img.onerror = () => {
+        skeleton.style.display = "none";
+        img.src = "https://placeholder.com";
+        img.style.opacity = 1;
+    };
+
+    /* COPY URL */
+    card.querySelector(".copy").onclick = () => {
+        navigator.clipboard.writeText(item.img)
+            .then(()=>showToast("Image URL copied"))
+            .catch(()=>showToast("Copy failed"));
+    };
+
+    /* CORS-SAFE DOWNLOAD */
+    let downloading = false;
+    card.querySelector(".download").onclick = async () => {
+        if(downloading) return;
+        downloading = true;
+
+        try{
+            showToast("Downloading...");
+            const res = await fetch(item.img);
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = item.name.replace(/\s+/g,'_') + ".jpg";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            URL.revokeObjectURL(url);
+        }catch(e){
+            window.open(item.img,'_blank');
+        }
+        downloading = false;
+    };
+
+    return card;
+}
+
+/* LOAD BATCH */
+function loadMore(){
+    if(index >= filtered.length) return;
+
+    const fragment = document.createDocumentFragment();
+    const slice = filtered.slice(index, index + batch);
+
+    slice.forEach(item=>{
+        fragment.appendChild(createCard(item));
+    });
+
+    gallery.appendChild(fragment);
+    index += batch;
+}
+
+/* INFINITE SCROLL SENTINEL */
+const sentinel = document.createElement("div");
+sentinel.style.height = "10px";
+gallery.after(sentinel);
+
+new IntersectionObserver(entries=>{
+    if(entries[0].isIntersecting && index < filtered.length){
+        loadMore();
+    }
+}, { rootMargin: "100px" }).observe(sentinel);
+
+/* SEARCH WITH DEBOUNCE */
+let t;
+search.addEventListener("input", ()=>{
+    clearTimeout(t);
+
+    t = setTimeout(()=>{
+        const val = search.value.toLowerCase().trim();
+        filtered = data.filter(d => d.name.toLowerCase().includes(val));
+
+        gallery.innerHTML = "";
+        index = 0;
+
+        if(filtered.length === 0){
+            gallery.innerHTML = `<div class="no-results">No stickers found</div>`;
+            return;
+        }
+
+        loadMore();
+    },200);
 });
 
-cards.forEach(card=>{
-    card.addEventListener("click", ()=>{
-        const img = card.querySelector("img").src;
-        navigator.clipboard.writeText(img).then(() => {
-            clearTimeout(toastTimeout);
-            toast.classList.add("show");
-            toastTimeout = setTimeout(()=>toast.classList.remove("show"), 2000);
-        }).catch(err => console.error("Error copying link:", err));
-    });
-});
+/* INIT */
+loadMore();
 </script>
 
 </body>
