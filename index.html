@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dark Aesthetic Sticker Gallery</title>
+
+<link href="https://googleapis.com" rel="stylesheet">
+
+<style>
+body{
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    background:#111;
+    color:white;
+}
+header{
+    text-align:center;
+    padding:20px;
+    background:#1a1a1a;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+h1{
+    color:#ff66b2;
+}
+input{
+    width:85%;
+    max-width:400px;
+    padding:12px;
+    border:2px solid transparent;
+    border-radius:25px;
+    background:#2b2b2b;
+    color:white;
+    font-size:16px;
+    outline:none;
+    transition: 0.3s;
+}
+input:focus{
+    border-color: #ff66b2;
+    box-shadow: 0 0 10px rgba(255, 102, 178, 0.4);
+}
+.gallery{
+    column-count:4;
+    column-gap:15px;
+    padding:15px;
+}
+.card{
+    break-inside:avoid;
+    margin-bottom:15px;
+    background:#1c1c1c;
+    border-radius:16px;
+    overflow:hidden;
+    transition: transform .3s ease, box-shadow .3s ease;
+    cursor:pointer;
+}
+.card:hover{
+    transform:scale(1.03);
+    box-shadow: 0 0 15px rgba(255, 102, 178, 0.4);
+}
+.card img{
+    width:100%;
+    display:block;
+    padding: 15px; /* আইকনগুলো যেন সুন্দরভাবে ফিট হয় */
+    box-sizing: border-box;
+}
+.caption{
+    text-align:center;
+    padding:10px;
+    color:#ffcce6;
+}
+.hidden{
+    display:none !important;
+}
+.toast{
+    position:fixed;
+    bottom:-60px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#ff66b2;
+    color:black;
+    padding:12px 20px;
+    border-radius:20px;
+    transition:.4s;
+    font-weight: 600;
+    z-index: 1000;
+}
+.toast.show{
+    bottom:30px;
+}
+#no-match{
+    display:none;
+    text-align:center;
+    color:#ff66b2;
+    font-size:20px;
+    margin-top: 40px;
+}
+@media(max-width:900px){ .gallery{column-count:2;} }
+@media(max-width:500px){ .gallery{column-count:1;} }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>🌙 Dark Sticker Gallery</h1>
+    <input type="text" id="search" placeholder="Search stickers...">
+</header>
+
+<div id="toast" class="toast">Sticker link copied 🖤</div>
+
+<!-- আপনার নতুন Flaticon স্টিকার গ্যালারি -->
+<div class="gallery">
+    <div class="card"><img src="https://cdn-icons-png.flaticon.com/512/616/616494.png"><div class="caption">Moon vibe 🌙</div></div>
+    <div class="card"><img src="https://cdn-icons-png.flaticon.com/512/742/742751.png"><div class="caption">Dark anime 🖤</div></div>
+    <div class="card"><img src="https://cdn-icons-png.flaticon.com/512/869/869869.png"><div class="caption">Night aesthetic ✨</div></div>
+    <div class="card"><img src="https://cdn-icons-png.flaticon.com/512/833/833472.png"><div class="caption">Kawaii black 🎀</div></div>
+    <div class="card"><img src="https://cdn-icons-png.flaticon.com/512/616/616430.png"><div class="caption">Cute sticker 💜</div></div>
+    <div class="card"><img src="https://cdn-icons-png.flaticon.com/512/2922/2922510.png"><div class="caption">Soft goth 🌌</div></div>
+</div>  
+
+<div id="no-match">No stickers found 🖤</div>
+
+<script>
+const search = document.getElementById("search");
+const cards = document.querySelectorAll(".card");
+const toast = document.getElementById("toast");
+const noMatch = document.getElementById("no-match");
+let toastTimeout;
+
+search.addEventListener("input", function(){
+    let found = false;
+    const searchValue = search.value.toLowerCase().trim();
+
+    cards.forEach(card=>{
+        const text = card.innerText.toLowerCase();
+        if(text.includes(searchValue)){
+            card.classList.remove("hidden");
+            found = true;
+        } else {
+            card.classList.add("hidden");
+        }
+    });
+    noMatch.style.display = found ? "none" : "block";
+});
+
+cards.forEach(card=>{
+    card.addEventListener("click", ()=>{
+        const img = card.querySelector("img").src;
+        navigator.clipboard.writeText(img).then(() => {
+            clearTimeout(toastTimeout);
+            toast.classList.add("show");
+            toastTimeout = setTimeout(()=>toast.classList.remove("show"), 2000);
+        }).catch(err => console.error("Error copying link:", err));
+    });
+});
+</script>
+
+</body>
+</html>
